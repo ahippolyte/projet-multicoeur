@@ -119,7 +119,7 @@ static void parse_cmd_line(int argc, char *argv[], struct s_settings *p_settings
                         {
                                 usage();
                         }
-                        int value = atof(argv[i]);
+                        float value = atof(argv[i]);
                         int class = fpclassify(value);
                         if ((class != FP_NORMAL) && (class != FP_ZERO))
                         {
@@ -135,7 +135,7 @@ static void parse_cmd_line(int argc, char *argv[], struct s_settings *p_settings
                         {
                                 usage();
                         }
-                        int value = atof(argv[i]);
+                        float value = atof(argv[i]);
                         int class = fpclassify(value);
                         if ((class != FP_NORMAL) && (class != FP_ZERO))
                         {
