@@ -509,18 +509,17 @@ static void simd_stencil_func(ELEMENT_TYPE *p_mesh, struct s_settings *p_setting
         ELEMENT_TYPE *p_temporary_mesh = malloc(p_settings->mesh_width * p_settings->mesh_height * sizeof(*p_mesh));
         for (y = margin_y; y < p_settings->mesh_height - margin_y; y++)
         {
-                for (x = margin_x; x < p_settings->mesh_width - margin_x; x+=8)
+                for (x = margin_x; x < p_settings->mesh_width - margin_x; x += VECTOR_SIZE)
                 {
-                        __m256 value_v = _mm256_loadu_ps(p_mesh + (y * p_settings->mesh_width + x));
-                        __m256 result = _mm256_setzero_ps();
+                        __m256 result = _mm256_loadu_ps(p_mesh + (y * p_settings->mesh_width + x));
                         int stencil_x, stencil_y;
                         for (stencil_x = 0; stencil_x < STENCIL_WIDTH; stencil_x++)
                         {
                                 for (stencil_y = 0; stencil_y < STENCIL_HEIGHT; stencil_y++)
                                 {
-                                        __m256 stencil_v = _mm256_set1_ps(stencil_coefs[stencil_y * STENCIL_WIDTH + stencil_x]);
-                                        __m256 mul_v = _mm256_mul_ps(value_v, stencil_v);
-                                        result = _mm256_add_ps(mul_v, result);
+                                        __m256 value_v = _mm256_loadu_ps(p_mesh + ((y - 1 + stencil_y) * p_settings->mesh_width + (x - 1 + stencil_x)));
+                                        __m256 coef_v = _mm256_set1_ps(stencil_coefs[stencil_y * STENCIL_WIDTH + stencil_x]);
+                                        result = _mm256_fmadd_ps(value_v, coef_v, result);
                                 }
                         }
                         _mm256_storeu_ps(p_temporary_mesh + (y * p_settings->mesh_width + x), result);
