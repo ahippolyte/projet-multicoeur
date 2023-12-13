@@ -513,9 +513,9 @@ static void simd_stencil_func(ELEMENT_TYPE *p_mesh, struct s_settings *p_setting
                 {
                         __m256 result = _mm256_loadu_ps(p_mesh + (y * p_settings->mesh_width + x));
                         int stencil_x, stencil_y;
-                        for (stencil_x = 0; stencil_x < STENCIL_WIDTH; stencil_x++)
+                        for (stencil_y = 0; stencil_y < STENCIL_HEIGHT; stencil_y++)
                         {
-                                for (stencil_y = 0; stencil_y < STENCIL_HEIGHT; stencil_y++)
+                                for (stencil_x = 0; stencil_x < STENCIL_WIDTH; stencil_x++)
                                 {
                                         __m256 value_v = _mm256_loadu_ps(p_mesh + ((y - 1 + stencil_y) * p_settings->mesh_width + (x - 1 + stencil_x)));
                                         __m256 coef_v = _mm256_set1_ps(stencil_coefs[stencil_y * STENCIL_WIDTH + stencil_x]);
@@ -526,13 +526,7 @@ static void simd_stencil_func(ELEMENT_TYPE *p_mesh, struct s_settings *p_setting
                 }
         }
 
-        for (y = margin_y; y < p_settings->mesh_height - margin_y; y++)
-        {
-                for (x = margin_x; x < p_settings->mesh_width - margin_x; x++)
-                {
-                        p_mesh[y * p_settings->mesh_width + x] = p_temporary_mesh[y * p_settings->mesh_width + x];
-                }
-        }
+        memcpy(p_mesh, p_temporary_mesh, p_settings->mesh_width * p_settings->mesh_height * sizeof(*p_mesh));
         apply_boundary_conditions(p_mesh, p_settings);
         free(p_temporary_mesh);
 }
