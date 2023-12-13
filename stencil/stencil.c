@@ -6,6 +6,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <starpu.h>
+#include <immintrin.h>
 
 #define ELEMENT_TYPE float
 
