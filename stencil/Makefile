@@ -1,4 +1,4 @@
-PROG = stencil
+PROG = stencil stencil_starpu
 
 STARPU_VERSION = starpu-1.3
 CFLAGS = -Wall -g -O3
