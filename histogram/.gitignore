@@ -1,0 +1,5 @@
+histogram
+histogram_omp_collapse
+histogram_omp_inner
+histogram_omp_outer
+histogram_omp_taskloop
