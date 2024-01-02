@@ -429,9 +429,10 @@ static void omp_compute_histogram_collapse(const ELEMENT_TYPE *array, int *histo
         }
 
         ELEMENT_TYPE value;
+        int i,j;
         #pragma omp parallel for collapse(2) private(value) schedule(runtime)
-        for (int i = 0; i < p_settings->array_len; i++){
-                for (int j = 0; j < p_settings->nb_bins; j++){
+        for (i = 0; i < p_settings->array_len; i++){
+                for (j = 0; j < p_settings->nb_bins; j++){
                         value = array[i];
                         if (value >= bounds[j] && value < bounds[j + 1])
                         {

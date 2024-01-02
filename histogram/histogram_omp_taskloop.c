@@ -428,10 +428,12 @@ static void omp_compute_histogram_taskloop(const ELEMENT_TYPE *array, int *histo
         }
 
         ELEMENT_TYPE value;
-        #pragma omp taskloop private(value)
-        for (int i = 0; i < p_settings->array_len; i++){
+        int i;
+        #pragma omp taskloop
+        for (i = 0; i < p_settings->array_len; i++){
                 value = array[i];
-                for (int j = 0; j < p_settings->nb_bins; j++){
+                int j;
+                for (j = 0; j < p_settings->nb_bins; j++){
                         if (value >= bounds[j] && value < bounds[j + 1]){
                                 histogram[j]++;
                                 break;

@@ -428,10 +428,12 @@ static void omp_compute_histogram_outer(const ELEMENT_TYPE *array, int *histogra
         }
 
         ELEMENT_TYPE value;
+        int i;
         #pragma omp parallel for private(value) //schedule(runtime)
-        for (int i = 0; i < p_settings->array_len; i++){
+        for (i = 0; i < p_settings->array_len; i++){
                 value = array[i];
-                for (int j = 0; j < p_settings->nb_bins; j++){
+                int j;
+                for (j = 0; j < p_settings->nb_bins; j++){
                         if (value >= bounds[j] && value < bounds[j + 1]){
                                 #pragma omp atomic
                                 histogram[j]++;
