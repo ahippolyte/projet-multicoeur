@@ -432,15 +432,11 @@ static void omp_compute_histogram_inner(const ELEMENT_TYPE *array, int *histogra
         int i;
         for (i = 0; i < p_settings->array_len; i++){
                 value = array[i];
-                // flag = false;
                 int j;
                 #pragma omp parallel for firstprivate(value) schedule(runtime)
                 for (j = 0; j < p_settings->nb_bins; j++){
-                        // if (flag == true) continue;
-
                         if (value >= bounds[j] && value < bounds[j + 1]){
                                 histogram[j]++;
-                                // flag = true;
                         }
                 }
         }

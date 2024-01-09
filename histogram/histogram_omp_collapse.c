@@ -436,9 +436,7 @@ static void omp_compute_histogram_collapse(const ELEMENT_TYPE *array, int *histo
                         value = array[i];
                         if (value >= bounds[j] && value < bounds[j + 1])
                         {
-                                #pragma omp atomic
                                 histogram[j]++;
-                                // break;
                         }
                 }
         }
