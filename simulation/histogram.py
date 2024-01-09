@@ -21,12 +21,9 @@ repetitions = 10
 # the simulation is going to make an experience
 # with each combination of these parameters
 parameters = {
-    "kernels": ["histogram", "histogram_omp_outer", "histogram_omp_inner", "histogram_omp_collapse"],#, "histogram_omp_taskloop"],
-    # "kernels": ["histogram_omp_collapse"],
-    "array-len": 100000,
-    "nb-bins": 100000,
+    "kernels": ["histogram", "histogram_omp_outer", "histogram_omp_inner", "histogram_omp_collapse", "histogram_omp_reduce"],
+    "size": [2**i for i in range(15)],
     "schedule": ["static", "dynamic", "guided"],
-    # "schedule": ["static"],
     "nb_threads": [i for i in range(1,25,2)]
 }
 #-----------------------#
@@ -36,17 +33,32 @@ f.write("kernel,threads,schedule,array_len,nb_bins,nb_repeat,rep,timing,check_st
 f.close()
 
 print("Starting simulation...")
+
 for kernel in parameters["kernels"]:
-    for schedule in parameters["schedule"]:
-        for threads in parameters["nb_threads"]:
-            command = "OMP_SCHEDULE=" + str(schedule) + " OMP_NUM_THREADS=" + str(threads) + " " + BINARY_PATH + str(kernel) \
-            + " --array-len " + parameters["array-len"] + " --nb-bins " + parameters["nb-bins"] + " --nb-repeat " + str(repetitions)
+    if kernel == "histogram":
+        for size in parameters["size"]:
+            command = BINARY_PATH + "histogram --array-len " + str(size) + " --nb-bins " + str(size) + " --nb-repeat " + str(repetitions)
+            print(command)
             output = os.popen(command).read()
             lines = output.splitlines()
             del lines[0]
             for line in lines:
-                newline = str(kernel) + "," + str(threads) + "," + str(schedule) + "," + line
+                newline = str(kernel) + "," + "1" + "," + "none" + "," + line
                 f = open(DATA_DIRECTORY + "/" + DATA_FILE, "a")
                 f.write(newline + "\n")
                 f.close()
+    else:
+        for threads in parameters["nb_threads"]:
+            for schedule in parameters["schedule"]:
+                for size in parameters["size"]:
+                    command = "OMP_SCHEDULE=" + str(schedule) + " OMP_NUM_THREADS=" + str(threads) + " " + BINARY_PATH + str(kernel) + " --array-len " + str(size) + " --nb-bins " + str(size) + " --nb-repeat " + str(repetitions)
+                    print(command)
+                    output = os.popen(command).read()
+                    lines = output.splitlines()
+                    del lines[0]
+                    for line in lines:
+                        newline = str(kernel) + "," + str(threads) + "," + str(schedule) + "," + str(size) + line
+                        f = open(DATA_DIRECTORY + "/" + DATA_FILE, "a")
+                        f.write(newline + "\n")
+                        f.close()
 print("Simulation done.")
