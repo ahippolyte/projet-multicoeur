@@ -57,7 +57,7 @@ for kernel in parameters["kernels"]:
                     lines = output.splitlines()
                     del lines[0]
                     for line in lines:
-                        newline = str(kernel) + "," + str(threads) + "," + str(schedule) + "," + str(size) + line
+                        newline = str(kernel) + "," + str(threads) + "," + str(schedule) + "," + line
                         f = open(DATA_DIRECTORY + "/" + DATA_FILE, "a")
                         f.write(newline + "\n")
                         f.close()
