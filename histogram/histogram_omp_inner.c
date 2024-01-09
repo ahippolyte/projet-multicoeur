@@ -428,7 +428,6 @@ static void omp_compute_histogram_inner(const ELEMENT_TYPE *array, int *histogra
         }
 
         ELEMENT_TYPE value;
-        // bool flag;
         int i;
         for (i = 0; i < p_settings->array_len; i++){
                 value = array[i];

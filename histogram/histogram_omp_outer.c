@@ -435,6 +435,7 @@ static void omp_compute_histogram_outer(const ELEMENT_TYPE *array, int *histogra
                 int j;
                 for (j = 0; j < p_settings->nb_bins; j++){
                         if (value >= bounds[j] && value < bounds[j + 1]){
+                                #pragma omp atomic
                                 histogram[j]++;
                         }
                 }
