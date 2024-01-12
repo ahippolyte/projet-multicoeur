@@ -1,6 +1,2 @@
-data
-notebooks
-plots
 log_simulation_err
 log_simulation_out
-simulation_job.slm
