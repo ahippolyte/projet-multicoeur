@@ -358,6 +358,49 @@ static void print_csv_header(void)
         printf("\n");
 }
 
+static void naive_compute_histogram(const ELEMENT_TYPE *array, int *histogram, struct s_settings *p_settings)
+{
+        memset(histogram, 0, p_settings->nb_bins * sizeof(*histogram));
+
+        ELEMENT_TYPE *bounds = NULL;
+        bounds = malloc((p_settings->nb_bins + 1) * sizeof(*bounds));
+        if (bounds == NULL)
+        {
+                PRINT_ERROR("memory allocation failed");
+        }
+
+        {
+                const ELEMENT_TYPE offset = p_settings->lower_bound;
+                const ELEMENT_TYPE scale = p_settings->upper_bound - p_settings->lower_bound;
+
+                bounds[0] = offset;
+
+                int j;
+                for (j = 0; j < p_settings->nb_bins; j++)
+                {
+                        bounds[j + 1] = offset + (j + 1) * scale / p_settings->nb_bins;
+                }
+        }
+
+        int i;
+        for (i = 0; i < p_settings->array_len; i++)
+        {
+                ELEMENT_TYPE value = array[i];
+
+                int j;
+                for (j = 0; j < p_settings->nb_bins; j++)
+                {
+                        if (value >= bounds[j] && value < bounds[j + 1])
+                        {
+                                histogram[j]++;
+                                break;
+                        }
+                }
+        }
+
+        free(bounds);
+}
+
 static void omp_compute_histogram_reduce(const ELEMENT_TYPE *array, int *histogram, struct s_settings *p_settings)
 {
         memset(histogram, 0, p_settings->nb_bins * sizeof(*histogram));
@@ -383,18 +426,20 @@ static void omp_compute_histogram_reduce(const ELEMENT_TYPE *array, int *histogr
         }
 
         int i;
+        ELEMENT_TYPE value;
         #pragma omp parallel for reduction(+: histogram[p_settings->nb_bins])
         for (i = 0; i < p_settings->array_len; i++)
         {
-                ELEMENT_TYPE value = array[i];
+                value = array[i];
 
                 int j;
                 for (j = 0; j < p_settings->nb_bins; j++)
                 {
                         if (value >= bounds[j] && value < bounds[j + 1])
                         {
+
                                 histogram[j]++;
-                                break;
+                                // break;
                         }
                 }
         }
@@ -428,7 +473,7 @@ static void run(const ELEMENT_TYPE *array, int *run_histogram, struct s_settings
 
 static int check(const ELEMENT_TYPE *array, int *check_histogram, const int *run_histogram, struct s_settings *p_settings)
 {
-        omp_compute_histogram_reduce(array, check_histogram, p_settings);
+        naive_compute_histogram(array, check_histogram, p_settings);
 
         if (p_settings->enable_output)
         {
