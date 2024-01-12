@@ -426,20 +426,20 @@ static void omp_compute_histogram_reduce(const ELEMENT_TYPE *array, int *histogr
         }
 
         int i;
-        ELEMENT_TYPE value;
-        #pragma omp parallel for reduction(+: histogram[p_settings->nb_bins])
+        #pragma omp parallel for schedule(runtime) reduction(+: histogram[:p_settings->nb_bins])
         for (i = 0; i < p_settings->array_len; i++)
         {
-                value = array[i];
+                ELEMENT_TYPE value = array[i];
+
+                int bin = (int) value / p_settings->nb_bins;
 
                 int j;
-                for (j = 0; j < p_settings->nb_bins; j++)
+                for (j = bin; j < p_settings->nb_bins; j++)
                 {
                         if (value >= bounds[j] && value < bounds[j + 1])
                         {
-
                                 histogram[j]++;
-                                // break;
+                                break;
                         }
                 }
         }
