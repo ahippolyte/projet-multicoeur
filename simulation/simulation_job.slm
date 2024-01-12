@@ -1,0 +1,11 @@
+#!/bin/bash
+#SBATCH -C miriel
+#SBATCH --job-name=histogram_simulation
+#SBATCH --time=24:00:00
+#SBATCH --output=log_simulation_out_2
+#SBATCH --error=log_simulation_err_2
+#SBATCH --exclusive
+
+# run
+module load compiler/gcc/12.2.0
+./histogram.py
