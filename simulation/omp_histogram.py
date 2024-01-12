@@ -11,7 +11,7 @@ BINARY_PATH = "../histogram/"
 
 # CSV output file
 DATA_DIRECTORY = "data"
-DATA_FILE = "histogram.csv"
+DATA_FILE = "omp_histogram.csv"
 
 # Number of repetitions for each experience
 repetitions = 10
@@ -22,9 +22,9 @@ repetitions = 10
 # with each combination of these parameters
 parameters = {
     "kernels": ["histogram", "histogram_omp_outer", "histogram_omp_inner", "histogram_omp_collapse", "histogram_omp_reduce"],
-    "size": [2**i for i in range(15)],
+    "size": [2**i for i in range(2,15)],
     "schedule": ["static", "dynamic", "guided"],
-    "nb_threads": [i for i in range(1,25,2)]
+    "nb_threads": [i for i in range(1,25,2)] + [24]
 }
 #-----------------------#
 
