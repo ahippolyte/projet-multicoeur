@@ -8,6 +8,8 @@
 #include <starpu.h>
 #include <immintrin.h>
 
+#define VECTOR_SIZE 8
+
 #define ELEMENT_TYPE float
 
 #define DEFAULT_MESH_WIDTH 2000
