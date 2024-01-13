@@ -21,9 +21,8 @@ repetitions = 10
 # the simulation is going to make an experience
 # with each combination of these parameters
 parameters = {
-    # "kernels": ["stencil", "stencil_starpu"],
-    "kernels": ["stencil_starpu"],
-    "mesh-size": [2**i for i in range(5, 12)]
+    "kernels": ["stencil", "stencil_starpu"],
+    "mesh-size": [2**i for i in range(9, 13)]
 }
 #-----------------------#
 
@@ -48,7 +47,8 @@ for kernel in parameters["kernels"]:
                 f.close()
     else :
         for size in parameters["mesh-size"]:
-            for partitions in range(2, 25):
+            nb_partitions = [2**i for i in range(1, int(np.log2(size)))] + [size-2]
+            for partitions in nb_partitions:
                 command = BINARY_PATH + str(kernel) + " --nb-partitions " + str(partitions) + " --mesh-width " + str(size) + " --mesh-height " + str(size) + " --nb-repeat " + str(repetitions)
                 print(command)
                 output = os.popen(command).read()
