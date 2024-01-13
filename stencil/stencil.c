@@ -427,6 +427,8 @@ static void naive_stencil_func(ELEMENT_TYPE *p_mesh, struct s_settings *p_settin
                         p_mesh[y * p_settings->mesh_width + x] = p_temporary_mesh[y * p_settings->mesh_width + x];
                 }
         }
+
+        free(p_temporary_mesh);
 }
 
 static void run(ELEMENT_TYPE *p_mesh, struct s_settings *p_settings)
