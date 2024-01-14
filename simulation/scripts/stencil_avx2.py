@@ -23,7 +23,7 @@ repetitions = 10
 parameters = {
     "kernels": ["stencil_avx2", "stencil"],
     "mesh-width": [5*i for i in range(1,11)] + [100, 1000, 2000],
-    "mesh-width": [5*i for i in range(1,11)] + [100, 1000, 2000],
+    "mesh-height": [5*i for i in range(1,11)] + [100, 1000, 2000],
 }
 #-----------------------#
 
