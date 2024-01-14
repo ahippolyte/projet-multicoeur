@@ -5,7 +5,6 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-#include <starpu.h>
 #include <immintrin.h>
 
 #define VECTOR_SIZE 8
