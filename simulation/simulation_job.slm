@@ -2,10 +2,10 @@
 #SBATCH -C miriel
 #SBATCH --job-name=histogram_simulation
 #SBATCH --time=24:00:00
-#SBATCH --output=log_simulation_out
-#SBATCH --error=log_simulation_err
+#SBATCH --output=logs/log_simulation_out
+#SBATCH --error=logs/log_simulation_err
 #SBATCH --exclusive
 
 # run
-module load compiler/gcc/12.2.0
-./scripts/omp_histogram.py
+module load compiler/gcc/11.2.0 hardware/hwloc/2.5.0 runtime/starpu/1.3.8/1.3.8/mpi tools/trace/likwid/4.0.3-amd
+cd scripts; ./stencil_starpu_energy.py

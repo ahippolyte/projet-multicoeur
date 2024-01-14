@@ -1,0 +1,3 @@
+kernel,nb_partitions,mesh_size,nb_repeat,cores,dram
+stencil,1,512,10,464.21440,76.80950
+stencil,1,1024,10,1824.17430,282.84230
